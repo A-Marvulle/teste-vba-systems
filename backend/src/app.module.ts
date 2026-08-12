@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { join } from 'path';
 import { GatewayModule } from './gateway/gateway.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { GatewayModule } from './gateway/gateway.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: 'mysql',
-        host: 'localhost',
+        host: config.get<string>('MYSQL_HOST', 'localhost'),
         port: config.get<number>('MYSQL_PORT', 3306),
         username: config.get<string>('MYSQL_USER'),
         password: config.get<string>('MYSQL_PASSWORD'),
@@ -29,6 +30,7 @@ import { GatewayModule } from './gateway/gateway.module';
     }),
     UsersModule,
     GatewayModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

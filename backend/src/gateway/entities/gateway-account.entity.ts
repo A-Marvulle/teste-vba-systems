@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -8,6 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { encryptedColumnTransformer } from '../../common/crypto/encrypted-column.transformer';
 
 @Entity('gateway_accounts')
 export class GatewayAccount {
@@ -24,7 +26,8 @@ export class GatewayAccount {
   @Column()
   chaveLoja: string;
 
-  @Column()
+  @Exclude()
+  @Column({ type: 'text', transformer: encryptedColumnTransformer })
   accessToken: string;
 
   @CreateDateColumn()
