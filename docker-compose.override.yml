@@ -1,0 +1,29 @@
+# Aplicado automaticamente pelo `docker compose up` (sem precisar de -f).
+# Troca os serviços de build de produção pelos estágios "dev" dos
+# Dockerfiles (nest start --watch / vite dev), montando o código como
+# volume pra hot reload. Pra rodar o build de produção "puro" (como
+# ficaria num deploy real), use:
+#   docker compose -f docker-compose.yml up -d --build
+services:
+  backend:
+    build:
+      context: ./backend
+      target: dev
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/nest-cli.json:/app/nest-cli.json
+      - ./backend/tsconfig.json:/app/tsconfig.json
+      - ./backend/tsconfig.build.json:/app/tsconfig.build.json
+    command: pnpm start:dev
+
+  frontend:
+    build:
+      context: ./frontend
+      target: dev
+    environment:
+      VITE_API_URL: ${VITE_API_URL}
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/index.html:/app/index.html
+      - ./frontend/vite.config.ts:/app/vite.config.ts
+    command: pnpm dev --host 0.0.0.0 --port 80

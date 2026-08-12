@@ -5,11 +5,20 @@ function formToObject(form: HTMLFormElement) {
   return Object.fromEntries(new FormData(form).entries());
 }
 
+interface PaymentResult {
+  externalReference: string;
+  method: string;
+  amount: number;
+  status: string;
+  qrCodeBase64?: string | null;
+}
+
 function App() {
   const [token, setTok] = useState<string | null>(getToken());
   const [log, setLog] = useState<unknown>(null);
   const [qrCodeBase64, setQrCodeBase64] = useState<string | null>(null);
   const [feePercent, setFeePercent] = useState<string>('');
+  const [receipt, setReceipt] = useState<PaymentResult | null>(null);
   const cardFormRef = useRef<HTMLFormElement>(null);
 
   function login(newToken: string) {
@@ -74,13 +83,14 @@ function App() {
     e.preventDefault();
     const { amount, payerDocument } = formToObject(e.currentTarget);
     setQrCodeBase64(null);
-    const result = await run<{ qrCodeBase64?: string }>(() =>
+    const result = await run<PaymentResult>(() =>
       apiFetch('/payments/pix', {
         method: 'POST',
         body: JSON.stringify({ amount: Number(amount), payerDocument }),
       }),
     );
     if (result?.qrCodeBase64) setQrCodeBase64(result.qrCodeBase64);
+    if (result?.status === 'APPROVED') setReceipt(result);
   }
 
   async function handleConsultarTaxa() {
@@ -97,7 +107,7 @@ function App() {
   async function handleCard(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = formToObject(e.currentTarget);
-    await run(() =>
+    const result = await run<PaymentResult>(() =>
       apiFetch('/payments/card', {
         method: 'POST',
         body: JSON.stringify({
@@ -108,6 +118,7 @@ function App() {
         }),
       }),
     );
+    if (result?.status === 'APPROVED') setReceipt(result);
   }
 
   async function handleWithdraw(e: FormEvent<HTMLFormElement>) {
@@ -162,8 +173,26 @@ function App() {
 
   return (
     <div>
+      <style>{`
+        @media print {
+          body * { display: none; }
+          #receipt, #receipt * { display: block; }
+        }
+      `}</style>
+
       <h1>BaaS VBA Systems</h1>
       <button onClick={logout}>Sair</button>
+
+      {receipt && (
+        <section id="receipt">
+          <h2>Comprovante de pagamento</h2>
+          <p>Método: {receipt.method}</p>
+          <p>Valor: {receipt.amount} centavos</p>
+          <p>Referência: {receipt.externalReference}</p>
+          <p>Status: {receipt.status}</p>
+          <button onClick={() => window.print()}>Imprimir</button>
+        </section>
+      )}
 
       <h2>Vincular conta do gateway</h2>
       <form onSubmit={handleGatewayLink}>

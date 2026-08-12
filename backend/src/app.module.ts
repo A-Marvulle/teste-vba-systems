@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
+import { existsSync } from 'fs';
 import { join } from 'path';
 import { GatewayModule } from './gateway/gateway.module';
 import { AuthModule } from './auth/auth.module';
@@ -14,11 +15,13 @@ import { WalletModule } from './wallet/wallet.module';
 import { WithdrawalsModule } from './withdrawals/withdrawals.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
 
+const rootEnvPath = join(process.cwd(), '../.env');
+
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: join(process.cwd(), '../.env'),
+      envFilePath: existsSync(rootEnvPath) ? rootEnvPath : undefined,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

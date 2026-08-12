@@ -30,6 +30,7 @@
     "argon2": "^0.45.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
+    "express": "^5.2.1",
     "mysql2": "^3.23.3",
     "ofetch": "^1.5.1",
     "reflect-metadata": "^0.2.2",
