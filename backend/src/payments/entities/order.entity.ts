@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { CheckoutLink } from './checkout-link.entity';
-import { CheckoutStatus } from '../enums/checkout-status.enum';
+import { GatewayStatus } from '../../common/enums/gateway-status.enum';
 
 @Entity('orders')
 export class Order {
@@ -30,8 +30,8 @@ export class Order {
   @Column({ type: 'text', nullable: true })
   emv: string | null;
 
-  @Column({ type: 'enum', enum: CheckoutStatus })
-  status: CheckoutStatus;
+  @Column({ type: 'enum', enum: GatewayStatus })
+  status: GatewayStatus;
 
   @Column({ type: 'json' })
   rawResponse: unknown;

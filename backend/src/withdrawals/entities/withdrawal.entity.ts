@@ -5,17 +5,14 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { Order } from './order.entity';
-import { CheckoutMethod } from '../enums/checkout-method.enum';
 import { GatewayStatus } from '../../common/enums/gateway-status.enum';
 
-@Entity('checkout_links')
-export class CheckoutLink {
+@Entity('withdrawals')
+export class Withdrawal {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -24,30 +21,26 @@ export class CheckoutLink {
   @JoinColumn()
   user: User;
 
-  @Column({ type: 'enum', enum: CheckoutMethod })
-  method: CheckoutMethod;
-
   @Column({ type: 'int' })
   amount: number;
 
-  @Column({ type: 'int', nullable: true })
-  installments: number | null;
+  @Column()
+  pixKey: string;
 
-  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
-  feePercent: string | null;
+  @Column()
+  document: string;
 
   @Column({ unique: true })
   externalReference: string;
 
-  @Column({
-    type: 'enum',
-    enum: GatewayStatus,
-    default: GatewayStatus.PENDING,
-  })
+  @Column({ type: 'varchar', nullable: true })
+  gatewayWithdrawalId: string | null;
+
+  @Column({ type: 'enum', enum: GatewayStatus, default: GatewayStatus.PENDING })
   status: GatewayStatus;
 
-  @OneToOne(() => Order, (order) => order.checkoutLink)
-  order: Order;
+  @Column({ type: 'json' })
+  rawResponse: unknown;
 
   @CreateDateColumn()
   createdAt: Date;

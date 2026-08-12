@@ -10,6 +10,8 @@ import { AuthModule } from './auth/auth.module';
 import { LeraBoxHttpModule } from './common/lera-box/lera-box-http.module';
 import { FeesModule } from './fees/fees.module';
 import { PaymentsModule } from './payments/payments.module';
+import { WalletModule } from './wallet/wallet.module';
+import { WithdrawalsModule } from './withdrawals/withdrawals.module';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { PaymentsModule } from './payments/payments.module';
     AuthModule,
     FeesModule,
     PaymentsModule,
+    WalletModule,
+    WithdrawalsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

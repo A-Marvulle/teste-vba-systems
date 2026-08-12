@@ -11,7 +11,8 @@ import { LeraBoxHttpService } from '../common/lera-box/lera-box-http.service';
 import { FeesService } from '../fees/fees.service';
 import { CheckoutLink } from './entities/checkout-link.entity';
 import { Order } from './entities/order.entity';
-import { CheckoutMethod, CheckoutStatus } from './enums/checkout-status.enum';
+import { CheckoutMethod } from './enums/checkout-method.enum';
+import { toGatewayStatus } from '../common/enums/gateway-status.enum';
 import { CreatePixPaymentDto } from './dto/create-pix-payment.dto';
 import { CreateCardPaymentDto } from './dto/create-card-payment.dto';
 
@@ -22,12 +23,6 @@ interface GatewayPaymentResponse {
   qrCodeBase64?: string;
   emv?: string;
   [key: string]: unknown;
-}
-
-function toCheckoutStatus(status?: string): CheckoutStatus {
-  if (status === 'APPROVED') return CheckoutStatus.APPROVED;
-  if (status === 'DENIED') return CheckoutStatus.DENIED;
-  return CheckoutStatus.PENDING;
 }
 
 @Injectable()
@@ -58,7 +53,7 @@ export class PaymentsService {
         },
       );
 
-    const status = toCheckoutStatus(response.status);
+    const status = toGatewayStatus(response.status);
 
     const checkoutLink = await this.checkoutLinkRepository.save(
       this.checkoutLinkRepository.create({
@@ -117,7 +112,7 @@ export class PaymentsService {
         },
       );
 
-    const status = toCheckoutStatus(response.status);
+    const status = toGatewayStatus(response.status);
 
     const checkoutLink = await this.checkoutLinkRepository.save(
       this.checkoutLinkRepository.create({
