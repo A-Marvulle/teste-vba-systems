@@ -2,8 +2,14 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { json } from 'express';
+import type { IncomingMessage } from 'http';
 import { AppModule } from './app.module';
 import { correlationIdMiddleware } from './common/middleware/correlation-id.middleware';
+
+interface RequestWithRawBody extends IncomingMessage {
+  rawBody?: Buffer;
+}
 
 const REQUIRED_ENV_VARS = ['GATEWAY_BASE_URL', 'JWT_SECRET', 'CRYPTO_SECRET'];
 
@@ -19,12 +25,19 @@ function assertRequiredEnvVars(configService: ConfigService) {
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { bodyParser: false });
 
   const configService = app.get(ConfigService);
   assertRequiredEnvVars(configService);
 
   app.use(correlationIdMiddleware);
+  app.use(
+    json({
+      verify: (req: RequestWithRawBody, _res, buf) => {
+        req.rawBody = buf;
+      },
+    }),
+  );
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));

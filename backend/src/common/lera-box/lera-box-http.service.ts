@@ -32,10 +32,14 @@ export class LeraBoxHttpService {
     return this.request<T>(path, { method: 'POST', body, token });
   }
 
+  authenticatedDelete<T>(path: string, token: string): Promise<T> {
+    return this.request<T>(path, { method: 'DELETE', token });
+  }
+
   private async request<T>(
     path: string,
     options: {
-      method: 'GET' | 'POST';
+      method: 'GET' | 'POST' | 'DELETE';
       body?: object;
       query?: Query;
       token?: string;

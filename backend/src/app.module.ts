@@ -12,6 +12,7 @@ import { FeesModule } from './fees/fees.module';
 import { PaymentsModule } from './payments/payments.module';
 import { WalletModule } from './wallet/wallet.module';
 import { WithdrawalsModule } from './withdrawals/withdrawals.module';
+import { WebhooksModule } from './webhooks/webhooks.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { WithdrawalsModule } from './withdrawals/withdrawals.module';
     PaymentsModule,
     WalletModule,
     WithdrawalsModule,
+    WebhooksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
