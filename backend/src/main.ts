@@ -30,6 +30,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   assertRequiredEnvVars(configService);
 
+  app.enableCors();
   app.use(correlationIdMiddleware);
   app.use(
     json({
