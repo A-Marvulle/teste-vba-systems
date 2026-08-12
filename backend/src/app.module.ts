@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UsersModule } from './users/users.module';
 import { join } from 'path';
+import { GatewayModule } from './gateway/gateway.module';
 
 @Module({
   imports: [
@@ -10,6 +13,22 @@ import { join } from 'path';
       isGlobal: true,
       envFilePath: join(process.cwd(), '../.env'),
     }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'mysql',
+        host: 'localhost',
+        port: config.get<number>('MYSQL_PORT', 3306),
+        username: config.get<string>('MYSQL_USER'),
+        password: config.get<string>('MYSQL_PASSWORD'),
+        database: config.get<string>('MYSQL_DATABASE'),
+        entities: [join(__dirname, '**/*.entity{.ts,.js}')],
+        synchronize: true,
+      }),
+    }),
+    UsersModule,
+    GatewayModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,0 +1,16 @@
+import { IsString, IsUUID, Matches, MinLength } from 'class-validator';
+
+export class LinkGatewayAccountDto {
+  @IsUUID()
+  userId: string;
+
+  @IsString()
+  @Matches(/^(\d{11}|\d{14})$/, {
+    message: 'document deve ser CPF (11) ou CNPJ (14)',
+  })
+  document: string;
+
+  @IsString()
+  @MinLength(6)
+  password: string;
+}
