@@ -3,17 +3,15 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
-import { FetchError, ofetch } from 'ofetch';
 import { RegisterGatewayUserDto } from './dto/register-gateway-user.dto';
 import { LoginGatewayDto } from './dto/login-gateway.dto';
 import { LinkGatewayAccountDto } from './dto/link-gateway-account.dto';
 import { GatewayAccount } from './entities/gateway-account.entity';
 import { UsersService } from '../users/users.service';
+import { LeraBoxHttpService } from '../common/lera-box/lera-box-http.service';
 
 const MYSQL_DUPLICATE_ENTRY_ERRNO = 1062;
 
@@ -25,23 +23,22 @@ export interface GatewayLoginResponse {
 
 @Injectable()
 export class GatewayService {
-  private readonly baseUrl: string;
-
   constructor(
-    private readonly configService: ConfigService,
     private readonly usersService: UsersService,
+    private readonly leraBoxHttp: LeraBoxHttpService,
     @InjectRepository(GatewayAccount)
     private readonly gatewayAccountRepository: Repository<GatewayAccount>,
-  ) {
-    this.baseUrl = this.configService.getOrThrow<string>('GATEWAY_BASE_URL');
-  }
+  ) {}
 
   async registerUser(dto: RegisterGatewayUserDto): Promise<unknown> {
-    return this.request('/users', dto);
+    return this.leraBoxHttp.publicPost('/users', dto);
   }
 
   async login(dto: LoginGatewayDto): Promise<GatewayLoginResponse> {
-    return this.request<GatewayLoginResponse>('/auth/login', dto);
+    return this.leraBoxHttp.publicPost<GatewayLoginResponse>(
+      '/auth/login',
+      dto,
+    );
   }
 
   async linkAccount(
@@ -90,20 +87,17 @@ export class GatewayService {
     }
   }
 
-  private async request<T>(path: string, body: object): Promise<T> {
-    try {
-      return await ofetch<T>(`${this.baseUrl}${path}`, {
-        method: 'POST',
-        body: body as Record<string, unknown>,
-      });
-    } catch (error) {
-      if (error instanceof FetchError && error.response) {
-        if (error.response.status === 401) {
-          throw new UnauthorizedException(error.response._data);
-        }
-        throw new BadGatewayException(error.response._data);
-      }
-      throw new BadGatewayException('Falha ao comunicar com o gateway');
+  async getAccessToken(userId: string): Promise<string> {
+    const account = await this.gatewayAccountRepository.findOne({
+      where: { user: { id: userId } },
+    });
+
+    if (!account) {
+      throw new NotFoundException(
+        'Usuário não possui conta do gateway vinculada',
+      );
     }
+
+    return account.accessToken;
   }
 }

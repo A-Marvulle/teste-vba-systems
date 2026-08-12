@@ -7,6 +7,9 @@ import { UsersModule } from './users/users.module';
 import { join } from 'path';
 import { GatewayModule } from './gateway/gateway.module';
 import { AuthModule } from './auth/auth.module';
+import { LeraBoxHttpModule } from './common/lera-box/lera-box-http.module';
+import { FeesModule } from './fees/fees.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -28,9 +31,12 @@ import { AuthModule } from './auth/auth.module';
         synchronize: true,
       }),
     }),
+    LeraBoxHttpModule,
     UsersModule,
     GatewayModule,
     AuthModule,
+    FeesModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

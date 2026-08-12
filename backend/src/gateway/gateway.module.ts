@@ -14,5 +14,6 @@ import { AuthModule } from '../auth/auth.module';
   ],
   providers: [GatewayService],
   controllers: [GatewayController],
+  exports: [GatewayService],
 })
 export class GatewayModule {}
