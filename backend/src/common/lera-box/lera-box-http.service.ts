@@ -48,7 +48,7 @@ export class LeraBoxHttpService {
     try {
       return await ofetch<T>(`${this.baseUrl}${path}`, {
         method: options.method,
-        body: options.body as Record<string, unknown> | undefined,
+        body: options.body ? { ...options.body } : undefined,
         query: options.query,
         headers: options.token
           ? { Authorization: `Bearer ${options.token}` }
