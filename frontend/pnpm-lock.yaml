@@ -23,6 +23,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      jquery:
+        specifier: 1.12.0
+        version: 1.12.0
       lucide-react:
         specifier: ^1.31.0
         version: 1.31.0(react@19.2.8)
@@ -44,6 +47,9 @@ importers:
       tailwindcss:
         specifier: ^4.3.3
         version: 4.3.3
+      turn.js:
+        specifier: ^1.0.5
+        version: 1.0.5
       tw-animate-css:
         specifier: ^1.4.0
         version: 1.4.0
@@ -51,6 +57,9 @@ importers:
       '@eslint/js':
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.8.1(jiti@2.7.0))
+      '@types/jquery':
+        specifier: ^4.0.1
+        version: 4.0.1
       '@types/node':
         specifier: ^24.13.3
         version: 24.13.3
@@ -580,6 +589,9 @@ packages:
 
   '@types/estree@1.0.9':
     resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
+
+  '@types/jquery@4.0.1':
+    resolution: {integrity: sha512-9a59A/tycXgYuPABcp6/3spSShn0NT2UOM4EfHvMumjYi4lJWTsK5SZWjhx3yRm9IHGCeWXdV2YfNsrWrft/CA==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -1356,6 +1368,10 @@ packages:
   jose@6.2.8:
     resolution: {integrity: sha512-Bsdjwm3Qsd/P0jR+BHDe3LytDfY7WBq2HmCCLIwuVRHMuEC9ae7/R474GIUdF1NgCyZjzVo/A9DOiOBtXq8ZoQ==}
 
+  jquery@1.12.0:
+    resolution: {integrity: sha512-fnEEC7ylFkIKfOGvEky9Odcth1VYo61dfkQLxlDHjtNoIY9ssxybvTSG5xLDbutWdKn+grAu4EUJfhSUZODktQ==}
+    deprecated: This version is deprecated. Please upgrade to the latest version or find support at https://www.herodevs.com/support/jquery-nes.
+
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
@@ -2062,6 +2078,9 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
+  turn.js@1.0.5:
+    resolution: {integrity: sha512-36XRk5f6pm02AaPDEomJwfd7huc5U3SHv/ROBiL+rHBRuh1hkdxuuEwHiMW934lOJAsR+ML6XksPNUgRk1lPTQ==}
+
   tw-animate-css@1.4.0:
     resolution: {integrity: sha512-7bziOlRqH0hJx80h/3mbicLW7o8qLsH5+RaLR2t+OHM3D0JlWGODQKQ4cxbK7WlvmUxpcj6Kgu6EKqjrGFe3QQ==}
 
@@ -2712,6 +2731,8 @@ snapshots:
   '@types/esrecurse@4.3.1': {}
 
   '@types/estree@1.0.9': {}
+
+  '@types/jquery@4.0.1': {}
 
   '@types/json-schema@7.0.15': {}
 
@@ -3465,6 +3486,8 @@ snapshots:
 
   jose@6.2.8: {}
 
+  jquery@1.12.0: {}
+
   js-tokens@4.0.0: {}
 
   js-yaml@4.3.1:
@@ -4122,6 +4145,10 @@ snapshots:
       strip-bom: 3.0.0
 
   tslib@2.8.1: {}
+
+  turn.js@1.0.5:
+    dependencies:
+      jquery: 1.12.0
 
   tw-animate-css@1.4.0: {}
 
