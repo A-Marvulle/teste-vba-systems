@@ -1,11 +1,15 @@
-import { Link } from 'react-router-dom';
-
+import { buttonVariants } from "@/components/ui/button";
 function NotFound() {
   return (
-    <div>
+    <div className='max-w-3xs text-center p-8 shadow mx-auto'>
       <h1>404</h1>
-      <p>Página não encontrada.</p>
-      <Link to="/">Voltar</Link>
+      <p className="my-4">Página não encontrada.</p>
+      <a
+        href="/"
+        className={buttonVariants({ variant: "default", size: "default" })}
+      >
+        Voltar
+      </a>
     </div>
   );
 }

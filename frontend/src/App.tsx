@@ -5,6 +5,7 @@ import RequireAuth from './RequireAuth';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import NotFound from './pages/NotFound';
+import Primitive from './pages/Primitive';
 import DashboardLayout from './pages/dashboard/DashboardLayout';
 import GatewayLink from './pages/dashboard/GatewayLink';
 import GatewayRegister from './pages/dashboard/GatewayRegister';
@@ -27,6 +28,7 @@ function App() {
     <Routes>
       <Route path="/login" element={token ? <Navigate to="/" /> : <Login onLoginSuccess={setTok} />} />
       <Route path="/cadastro" element={token ? <Navigate to="/" /> : <SignUp onLoginSuccess={setTok} />} />
+      <Route path="/primitive" element={<Primitive />} />
       <Route
         path="/"
         element={
