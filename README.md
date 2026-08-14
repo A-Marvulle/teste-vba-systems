@@ -19,6 +19,7 @@ saques e webhooks. Backend em **NestJS + TypeORM + MySQL**, frontend em
 - Saques (solicitação e consulta)
 - Registro e listagem de webhooks
 - Comprovante de pagamento imprimível
+- A url `/primitive` consta com as instruções do teste.
 
 ## Stack
 
@@ -35,6 +36,10 @@ saques e webhooks. Backend em **NestJS + TypeORM + MySQL**, frontend em
 
 Copie `.env.example` para `.env` na raiz do projeto e preencha as variáveis:
 
+```bash
+cp .env.example .env
+```
+
 | Variável | Descrição |
 |---|---|
 | `BACK_PORT` | Porta em que a API NestJS escuta (ex. `3000`) |
@@ -46,6 +51,19 @@ Copie `.env.example` para `.env` na raiz do projeto e preencha as variáveis:
 | `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_DATABASE`, `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_ROOT_PASSWORD` | Credenciais e conexão do MySQL |
 
 ## Como rodar
+
+Para Baixar as dependências é necessário estar na raiz do projeto:
+
+```bash
+cd frontend/
+pnpm i
+cd.. # voltar para raiz
+cd backend/
+pnpm i
+cd .. # voltar para raiz
+```
+
+ATENÇÃO: caso seu usuário não esteja no grupo de permissões do Docker, sera necessário rodar todos os comandos com `sudo`
 
 ### Opção 1 — Docker Compose (tudo em containers)
 
@@ -66,7 +84,6 @@ Suba só o banco via Docker e rode backend/frontend direto na máquina (com hot-
 docker compose up -d mysql
 
 cd backend
-pnpm install
 pnpm start:dev
 ```
 
@@ -74,7 +91,6 @@ Em outro terminal:
 
 ```bash
 cd frontend
-pnpm install
 pnpm dev
 ```
 
